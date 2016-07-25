@@ -48,6 +48,16 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'archive_image_disk' => [
+            'driver' => 'local',
+            'root'   => storage_path('imagearchive'),
+        ],
+
+        'input_image_disk' => [
+            'driver' => 'local',
+            'root'   => storage_path('imageinput'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

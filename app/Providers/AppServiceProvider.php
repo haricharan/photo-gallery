@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace PhotoGallery\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->environment() == 'local') {
+            $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
+            // $this->app->register('Way\Generators\GeneratorsServiceProvider');
+            $this->app->register('Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider');
+            $this->app->register('Barryvdh\Debugbar\ServiceProvider');
+        }
     }
 }
