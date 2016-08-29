@@ -4,7 +4,8 @@ namespace PhotoGallery\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Keyword extends Model {
+class Keyword extends Model
+{
 
     /**
      * The database table used by the model.
@@ -19,5 +20,4 @@ class Keyword extends Model {
      * @var array
      */
     protected $fillable = ['name'];
-
 }

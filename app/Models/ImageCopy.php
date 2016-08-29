@@ -4,7 +4,8 @@ namespace PhotoGallery\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ImageCopy extends Model {
+class ImageCopy extends Model
+{
 
     /**
      * The database table used by the model.
@@ -18,5 +19,5 @@ class ImageCopy extends Model {
      *
      * @var array
      */
-    protected $fillable = ['image_id', 'image_size_id', 'filename'];    
+    protected $fillable = ['image_id', 'image_size_id', 'filename'];
 }

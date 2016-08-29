@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
-class CreateIptcTable extends Migration
+class CreateExifTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -12,14 +13,15 @@ class CreateIptcTable extends Migration
      */
     public function up()
     {
-        Schema::create('iptc', function (Blueprint $table) {
-            $table->bigInteger('id', true)->unsigned();
-            $table->string('tag_name')->index('idx_i1');
+        Schema::create('exif', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('tag_name')->index('idx_e1');
             $table->string('tag_name_php');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
@@ -28,6 +30,6 @@ class CreateIptcTable extends Migration
      */
     public function down()
     {
-        Schema::drop('iptc');
+        Schema::drop('exif');
     }
 }

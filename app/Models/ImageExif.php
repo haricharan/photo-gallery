@@ -4,9 +4,10 @@ namespace PhotoGallery\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ImageExif extends Model {
+class ImageExif extends Model
+{
 
-   /**
+    /**
      * The database table used by the model.
      *
      * @var string
@@ -18,6 +19,5 @@ class ImageExif extends Model {
      *
      * @var array
      */
-    protected $fillable = ['image_id', 'exif_id', 'value'];    
-
+    protected $fillable = ['image_id', 'exif_id', 'value'];
 }

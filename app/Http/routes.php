@@ -12,7 +12,6 @@
 */
 
 Route::get('/', function () {
-    Debugbar::info('welcome message');
     return view('welcome');
 });
 
@@ -32,3 +31,23 @@ Route::get('/phpinfo', function () {
 //     return 'Hello World';
 // });
 
+
+// Route::auth();
+
+// Auth Route
+
+Route::group(['as' => 'auth.'], function () {
+    Route::get('/login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin']);
+    Route::post('/login', ['as' => 'login.post', 'uses' => 'Auth\AuthController@postLogin']);
+
+    Route::get('/register', ['as' => 'register', 'uses' => 'Auth\AuthController@getRegister']);
+    Route::post('/register', ['as' => 'register.post', 'uses' => 'Auth\AuthController@postRegister']);
+
+    Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@logout']);
+});
+
+
+Route::get('/home', ['as' => 'home', 'uses' =>'HomeController@index']);
+
+Route::get('/social/redirect/{provider}',   ['as' => 'social.redirect',   'uses' => 'Auth\AuthController@redirectToSocialProvider']);
+Route::get('/social/handle/{provider}',     ['as' => 'social.handle',     'uses' => 'Auth\AuthController@handleSocialProviderCallback']);

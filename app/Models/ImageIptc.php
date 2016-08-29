@@ -4,7 +4,8 @@ namespace PhotoGallery\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ImageIptc extends Model {
+class ImageIptc extends Model
+{
 
     /**
      * The database table used by the model.
@@ -19,5 +20,4 @@ class ImageIptc extends Model {
      * @var array
      */
     protected $fillable = ['image_id', 'iptc_id', 'value'];
-
 }

@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddForeignKeysToImageIptcTable extends Migration
+class CreateImageIptcTable extends Migration
 {
 
     /**
@@ -13,7 +13,14 @@ class AddForeignKeysToImageIptcTable extends Migration
      */
     public function up()
     {
-        Schema::table('image_iptc', function (Blueprint $table) {
+        Schema::create('image_iptc', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('image_id')->unsigned();
+            $table->bigInteger('iptc_id')->unsigned();
+            $table->string('value');
+            $table->timestamps();
+
+            $table->unique(['image_id', 'iptc_id'], 'idx_ii1');
             $table->foreign('iptc_id', 'image_iptc_ibfk_2')->references('id')->on('iptc')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             $table->foreign('image_id', 'image_iptc_ibfk_1')->references('id')->on('images')->onUpdate('RESTRICT')->onDelete('RESTRICT');
         });
@@ -23,13 +30,10 @@ class AddForeignKeysToImageIptcTable extends Migration
     /**
      * Reverse the migrations.
      *
-     * @return void
+     * @return void 
      */
     public function down()
     {
-        Schema::table('image_iptc', function (Blueprint $table) {
-            $table->dropForeign('image_iptc_ibfk_2');
-            $table->dropForeign('image_iptc_ibfk_1');
-        });
+        Schema::drop('image_iptc');
     }
 }

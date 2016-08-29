@@ -28,6 +28,12 @@ class AppServiceProvider extends ServiceProvider
             // $this->app->register('Way\Generators\GeneratorsServiceProvider');
             $this->app->register('Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider');
             $this->app->register('Barryvdh\Debugbar\ServiceProvider');
+
+            // register an alias
+            $this->app->booting(function () {
+                $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+                $loader->alias('Debugbar', 'Barryvdh\Debugbar\Facade');
+            });
         }
     }
 }

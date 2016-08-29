@@ -4,7 +4,8 @@ namespace PhotoGallery\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ImageSize extends Model {
+class ImageSize extends Model
+{
 
     /**
      * The database table used by the model.
@@ -18,6 +19,5 @@ class ImageSize extends Model {
      *
      * @var array
      */
-    protected $fillable = ['name', 'max_width', 'max_height', 'is_active'];    
-
+    protected $fillable = ['name', 'max_width', 'max_height', 'is_active'];
 }

@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => PhotoGallery\User::class,
+            'model' => PhotoGallery\Models\User::class,
         ],
 
         // 'users' => [
