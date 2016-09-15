@@ -3,7 +3,6 @@
 namespace Photogallery\Repositories;
 
 use Photogallery\Models\User;
-use Hash;
 
 class UserRepository
 {
@@ -16,5 +15,12 @@ class UserRepository
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function update($data, $id)
+    {
+        $user = User::find($id);
+        $user->fill($data);
+        $user->save();
     }
 }

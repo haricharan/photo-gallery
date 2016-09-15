@@ -61,6 +61,31 @@
                 </div>
             </div>
         </div>
+        <div class="spacer"></div>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Login with Social Accounts</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <a href="{{ route('social.redirect', ['provider' => 'google']) }}" class="btn btn-md btn-primary btn-block google" type="submit">Google</a>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <a href="{{ route('social.redirect', ['provider' => 'facebook']) }}" class="btn btn-md btn-primary btn-block google" type="submit">Facebook</a>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-4">
+                            <a href="{{ route('social.redirect', ['provider' => 'twitter']) }}" class="btn btn-md btn-primary btn-block google" type="submit">Twitter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

@@ -89,7 +89,11 @@
                         </div>
                     </form>
                 </div>
-                <div class="break"></div>
+            </div>
+        </div>
+        <div class="spacer"></div>
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
                 <div class="panel-heading">Register with Social Accounts</div>
                 <div class="panel-body">
                     <div class="row">

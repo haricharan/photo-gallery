@@ -33,7 +33,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    // protected $redirectTo = '/';
     protected $userRepository;
 
     /**
@@ -55,7 +55,7 @@ class AuthController extends Controller
             'email' => $email,
             'password' => $password,
         ], $remember == 1 ? true : false)) {
-            return redirect()->route('home');
+            return redirect()->route('user.home');
         } else {
             return redirect()->back()
                 ->with('message', 'Incorrect email or password')
@@ -67,7 +67,7 @@ class AuthController extends Controller
     public function register()
     {
         $request = Request::all();
-        $validator = Validator::make($request, User::$rules, User::$messages);
+        $validator = Validator::make($request, User::rules(false), User::$messages);
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
@@ -87,7 +87,7 @@ class AuthController extends Controller
                     'password' => $request['password'],
                 ], true);
 
-        return redirect()->route('home');
+        return redirect()->route('user.home');
     }
 
     public function logout()
@@ -122,6 +122,7 @@ class AuthController extends Controller
      */
     public function handleSocialProviderCallback($provider)
     {
+        \Debugbar::info('test message');
         $user = Socialite::driver($provider)->user();
         \Debugbar::info($user);
         $userCheck = User::where('email', '=', $user->email)->first();
@@ -136,8 +137,9 @@ class AuthController extends Controller
             $this->userRepository->register($newUserData);
             $userCheck = User::where('email', '=', $user->email)->first();
         }
-        
+        \Debugbar::info($userCheck);
         $userSocialLogin = $userCheck->socialLogins()->where('provider', '=', $provider)->first();
+        \Debugbar::info($userSocialLogin);
         if (empty($userSocialLogin)) {
             $userSocialLogin = SocialLogin::create([
                 'user_id' => $userCheck->id,
@@ -150,48 +152,8 @@ class AuthController extends Controller
             ]);
             $userSocialLogin = $userCheck->socialLogins()->where('provider', '=', $provider)->first();
         }
+        \Debugbar::info($userSocialLogin);
         $this->auth->login($userCheck, true);
-        return redirect()->route('home');
+        return redirect()->route('user.profile');
     }
-
-/*    public function socialHandle($provider)
-    {
-        $user = Socialite::driver($provider)->user();
-        $socialUser = null;
-        //Check is this email present
-        $userCheck = User::where('email', '=', $user->email)->first();
-        if (!empty($userCheck)) {
-            $socialUser = $userCheck;
-        } else {
-            $sameSocialId = Social::where('social_id', '=', $user->id)->where('provider', '=', $provider)->first();
-            if (empty($sameSocialId)) {
-                //There is no combination of this social id and provider, so create new one
-                $newSocialUser = new User;
-                $newSocialUser->email              = $user->email;
-                $name = explode(' ', $user->name);
-                $newSocialUser->first_name         = $name[0];
-                $newSocialUser->last_name          = $name[1];
-                $newSocialUser->save();
-                $socialData = new Social;
-                $socialData->social_id = $user->id;
-                $socialData->provider= $provider;
-                $newSocialUser->social()->save($socialData);
-                // Add role
-                $role = Role::whereName('user')->first();
-                $newSocialUser->assignRole($role);
-                $socialUser = $newSocialUser;
-            } else {
-                //Load this existing social user
-                $socialUser = $sameSocialId->user;
-            }
-        }
-        $this->auth->login($socialUser, true);
-        if ($this->auth->user()->hasRole('user')) {
-            return redirect()->route('user.home');
-        }
-        if ($this->auth->user()->hasRole('administrator')) {
-            return redirect()->route('admin.home');
-        }
-        return \App::abort(500);
-    }*/
 }
