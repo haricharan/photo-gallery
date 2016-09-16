@@ -41,7 +41,7 @@ class AuthController extends Controller
      */
     public function __construct(Guard $auth, UserRepository $users)
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'redirectToSocialProvider', 'handleSocialProviderCallback']]);
         $this->userRepository = $users;
         $this->auth = $auth;
     }
