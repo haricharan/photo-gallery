@@ -7,12 +7,6 @@ use Intervention\Image\ImageManagerStatic as ImageManager;
 
 class Image extends Model
 {
-    //     /**
-//      * The database table used by the model.
-//      *
-//      * @var string
-//      */
-//     protected $table = 'image';
 
     /**
      * The attributes that are mass assignable.
@@ -35,22 +29,14 @@ class Image extends Model
     /**
      * Set Exif for Image
      *
-     * @var array
+     * @param string $archivePath
      */
     public function setExif($archivePath)
     {
         try {
-            \Log::debug('in setExif');
-            \Log::debug($this->path);
-            \Log::debug($this->filename);
             $destFileFullName = $archivePath . '/' . $this->path . '/' . $this->filename;
-            \Log::debug($destFileFullName);
             $imageManager = ImageManager::make($destFileFullName);
-            \Log::debug($imageManager);
             $exif_tags = \PhotoGallery\Models\Exif::getAllTags();
-
-            \Log::debug($exif_tags);
-
             $exif = $imageManager->exif();
             $exif_merged = array_combine(
             array_intersect_key($exif_tags, $exif),
@@ -72,26 +58,75 @@ class Image extends Model
     /**
      * Set Iptc for Image
      *
-     * @var array
+     * @param string $archivePath
      */
     public function setIptc($archivePath)
     {
-        $destFileFullName = $archivePath . '/' . $this->path . '/' . $this->filename;
-        $imageManager = ImageManager::make($destFileFullName);
-        $iptc_tags = \PhotoGallery\Models\Iptc::getAllTags();
-        
-        $iptc = $imageManager->iptc();
-        $iptc_merged = array_combine(
-            array_intersect_key($iptc_tags, $iptc),
-            array_intersect_key($iptc, $iptc_tags));
-        while (list($id, $val) = each($iptc_merged)) {
-            if (isset($val)) {
-                \PhotoGallery\Models\ImageIptc::create([
-                    'image_id' => $this->id,
-                    'iptc_id' => $id,
-                    'value' => $val
-                ]);
+        try {
+            $destFileFullName = $archivePath . '/' . $this->path . '/' . $this->filename;
+            $imageManager = ImageManager::make($destFileFullName);
+            $iptc_tags = \PhotoGallery\Models\Iptc::getAllTags();
+            
+            $iptc = $imageManager->iptc();
+            $iptc_merged = array_combine(
+                array_intersect_key($iptc_tags, $iptc),
+                array_intersect_key($iptc, $iptc_tags));
+            while (list($id, $val) = each($iptc_merged)) {
+                if (isset($val)) {
+                    \PhotoGallery\Models\ImageIptc::create([
+                        'image_id' => $this->id,
+                        'iptc_id' => $id,
+                        'value' => $val
+                    ]);
+                }
             }
+        } catch (Exception $e) {
+            \Log::error($e->getMessage());
+        }
+    }
+
+    /**
+    * Create Image Copies
+    *
+    * @param string $archivePath
+    */
+    public function createCopies($archivePath, $destDir, $extension)
+    {
+        try {
+            ImageManager::configure(array('driver' => 'imagick'));
+            $orginalFileFullName = $archivePath . '/' . $this->path . '/' . $this->filename;
+            $imageManager = ImageManager::make($orginalFileFullName);
+
+            $iHeight = $imageManager->height();
+            $iWidth = $imageManager->height();
+
+            $imageSizes = ImageSize::active()->get();
+            \Log::debug($imageSizes);
+            foreach ($imageSizes as $imageSize) {
+                if ($iWidth >= $iHeight) {
+                    $newWidth = $imageSize->max_edge_length;
+                    $newHeight = null;
+                } 
+                $newWidth = null;
+                $newHeight = $imageSize->max_edge_length;
+
+                $newImage = $imageManager->resize($newWidth, $newHeight, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                $imageHash = str_random(32);
+                // $destFileFullName = '/' . $destFilePath . '/' . $imageHash . '.' . $extension;
+                $newImage->save($archivePath . '/' . $destDir . '/' . $imageHash . '.' . $extension, 100);
+
+                $imageCopy = ImageCopy::create([
+                                'image_id' => $this->id,
+                                'image_size_id' => $imageSize->id,
+                                'filename' => $imageHash . '.' . $extension
+                            ]);
+            }
+
+        } catch (Exception $e) {
+            \Log::error($e->getMessage());
         }
     }
 }

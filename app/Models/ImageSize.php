@@ -19,5 +19,15 @@ class ImageSize extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'max_width', 'max_height', 'is_active'];
+    protected $fillable = ['name', 'max_edge_length', 'is_active'];
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    }
 }

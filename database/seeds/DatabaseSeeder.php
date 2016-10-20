@@ -15,6 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call(IptcTableSeeder::class);
         $this->call(RoleTableSeeder::class);
         $this->call(UserTableSeeder::class);
-        // $this->call(ImageSizesTableSeeder::class);
+        $this->call(ImageSizesTableSeeder::class);
     }
 }

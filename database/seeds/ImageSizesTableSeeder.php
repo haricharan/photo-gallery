@@ -7,27 +7,31 @@ class ImageSizesTableSeeder extends Seeder
 
     public function run()
     {
-        DB::table('image_sizes')->truncate();
+        // DB::table('image_sizes')->truncate();
         PhotoGallery\Models\ImageSize::create([
             'name' => 'small',
-            'max_width' => 640,
-            'max_height' => 480,
+            'max_edge_length' => 200,
             'is_active' => true
         ]);
         
         PhotoGallery\Models\ImageSize::create([
             'name' => 'regular',
-            'max_width' => 800,
-            'max_height' => 600,
+            'max_edge_length' => 800,
             'is_active' => true
         ]);
 
         PhotoGallery\Models\ImageSize::create([
             'name' => 'large',
-            'max_width' => 1280,
-            'max_height' => 800,
+            'max_edge_length' => 1280,
             'is_active' => true
         ]);
+      
+        PhotoGallery\Models\ImageSize::create([
+            'name' => 'extra_large',
+            'max_edge_length' => 2048,
+            'is_active' => true
+        ]);
+
         $this->command->info('Image Sizes table seeded!');
     }
 }
